@@ -1,0 +1,19 @@
+.content {
+	padding: 0 18px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.5s ease-out;
+  	text-align: justify;
+  	width: 360px;
+  	margin: auto;
+}
+.pf-c-form__helper-text.pf-m-error {
+	display: block;
+    background: red;
+    color: white;
+    border: 1px solid white;
+    width: 270px;
+    margin: 10px auto;
+    padding: 5px;
+    font-weight: bold;
+}
