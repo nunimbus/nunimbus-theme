@@ -70,7 +70,7 @@
                     </div>
                     <div class="${properties.kcInputWrapperClass!}">
                         <input type="text" id="username" class="${properties.kcInputClass!}" name="username"
-                               value="${(register.formData.username!'')}" autocomplete="username"
+                               value="${(register.formData.username!'')}" autocomplete="disable"
                                aria-invalid="<#if messagesPerField.existsError('username')>true</#if>"
                                placeholder="${msg('username')}"
                         />
@@ -188,16 +188,16 @@
             </div>
         </form>
         <script>
-        function changeFunction() {
-            if (document.getElementById("encryption-message").value == document.getElementById("encryption-text").innerText) {
-                document.querySelector('input[type=submit]').disabled = false;
-                document.querySelector('input[type=submit]').style.backgroundColor ="#0082c9"
-            }
-            else {
-                document.querySelector('input[type=submit]').disabled = true;
-                document.querySelector('input[type=submit]').style.backgroundColor ="grey"
-            }
-        }
+		function changeFunction() {
+			if (document.getElementById("encryption-message").value == document.getElementById("encryption-text").innerText) {
+				document.querySelector('input[type=submit]').disabled = false;
+				document.querySelector('input[type=submit]').style.backgroundColor ="#0082c9"
+			}
+			else {
+				document.querySelector('input[type=submit]').disabled = true;
+				document.querySelector('input[type=submit]').style.backgroundColor ="grey"
+			}
+		}
         
 		var coll = document.getElementsByClassName("collapsible");
 		var i;
@@ -226,6 +226,148 @@
 			});
 		}
 
+		// Password validator
+		var validatorDiv = document.createElement('div');		
+		validatorDiv.id = 'password-validator';
+
+		validatorDiv.innerHTML = ' \
+			<div class="arrow"></div> \
+			<div class="inputValidationIndicator"> \
+				<h2 class="passwordHeader">Your password must include:</h2> \
+				<ul class="conditionList"> \
+					<li class="conditionWrapper length"><span class="condition"> or more characters</span></li> \
+					<li class="conditionWrapper uppercase"><span class="condition">an uppercase letter</span></li> \
+					<li class="conditionWrapper lowercase"><span class="condition">a lowercase letter</span></li> \
+					<li class="conditionWrapper number"><span class="condition">a number</span></li> \
+					<li class="conditionWrapper special"><span class="condition">a special character (! # $ ? % @)</span></li> \
+				</ul> \
+			</div>';
+
+		document.querySelector('input[type=password]').insertAdjacentElement('afterend', validatorDiv);
+
+		const conditions = {
+			"length":    12,
+			"uppercase": true,
+			"lowercase": true,
+			"number":    false,
+			"special":   false,
+		};
+
+		var validations = {
+		};
+
+		const pwInput = document.querySelector('input[type=password]');
+		const validator = document.querySelector('#password-validator');
+		const submit = document.querySelector('input[type=submit]');
+		var valid = false;
+
+		window.onload = function(){
+			submit.disabled = true;
+
+			Object.keys(conditions).forEach(key => {
+				var element = validator.querySelector('.conditionWrapper.' + key);
+
+				if (conditions[key] == false) {
+					element.style.display = 'none';
+				}
+				else {
+					validations[key] = false;
+				}
+				
+				if (key == 'length') {
+					element.textContent = conditions.length + element.textContent;
+				}
+			});
+		};
+
+		pwInput.addEventListener('focusin', function() {
+			pwInput.classList.toggle('error', false);
+
+			if (valid == false) {
+				const cssObj = window.getComputedStyle(pwInput, null);
+				validator.style.width = cssObj.width;
+				validator.style.display = "block";
+			}
+		});
+
+		pwInput.addEventListener('focusout', function() {
+			validatePassword();
+			validator.style.display = "none";
+		});
+
+		pwInput.addEventListener('keyup', validatePassword);
+
+		function validatePassword() {
+			var validationsMet = true;
+			Object.keys(validations).forEach(key => {
+				var element = validator.querySelector('.conditionWrapper.' + key);
+
+				switch(key) {
+					case 'length':
+						if (pwInput.value.length >= conditions.length) {
+							validations[key] = true;
+						}
+						else {
+							validations[key] = false;
+						}
+						break;
+					case 'uppercase':
+						if (pwInput.value.search(/.*[A-Z].*/) == 0) {
+							validations[key] = true;
+						}
+						else {
+							validations[key] = false;
+						}
+						break;
+					case 'lowercase':
+						if (pwInput.value.search(/.*[a-z].*/) == 0) {
+							validations[key] = true;
+						}
+						else {
+							validations[key] = false;
+						}
+						break;
+					case 'number':
+						if (pwInput.value.search(/.*[0-9].*/) == 0) {
+							validations[key] = true;
+						}
+						else {
+							validations[key] = false;
+						}
+						break;
+					case 'special':
+						if (pwInput.value.search(/.*[^a-zA-Z0-9].*/) == 0) {
+							validations[key] = true;
+						}
+						else {
+							validations[key] = false;
+						}
+						break;
+				}
+				
+				if (validations[key] == false) {
+					element.style.color = 'red';
+					validationsMet = false;
+				}
+				else {
+					element.style.color = 'green';				
+				}
+			});
+			
+			valid = validationsMet;
+			
+			if (valid) {
+				submit.disabled = false;
+				pwInput.classList.toggle('error', false);
+				validator.classList.toggle('fade-out', true);
+			}
+			else {
+				pwInput.classList.toggle('error', true);
+				submit.disabled = true;
+				validator.classList.toggle('fade-out', false);
+				validator.style.display = "block";		
+			}
+		}
         </script>
     </#if>
 </@layout.registrationLayout>
