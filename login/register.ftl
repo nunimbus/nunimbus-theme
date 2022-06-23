@@ -287,6 +287,7 @@
 				const cssObj = window.getComputedStyle(pwInput, null);
 				validator.style.width = cssObj.width;
 				validator.style.display = "block";
+				validator.style.left = "calc(50% - " + cssObj.width.slice(0,-2) / 2 + "px)";
 			}
 		});
 
