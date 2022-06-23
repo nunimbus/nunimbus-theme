@@ -281,7 +281,7 @@
 		};
 
 		pwInput.addEventListener('focusin', function() {
-			pwInput.classList.toggle('error', false);
+			pwInput.classList.toggle('password-error', false);
 
 			if (valid == false) {
 				const cssObj = window.getComputedStyle(pwInput, null);
@@ -359,11 +359,11 @@
 			
 			if (valid) {
 				submit.disabled = false;
-				pwInput.classList.toggle('error', false);
+				pwInput.classList.toggle('password-error', false);
 				validator.classList.toggle('fade-out', true);
 			}
 			else {
-				pwInput.classList.toggle('error', true);
+				pwInput.classList.toggle('password-error', true);
 				submit.disabled = true;
 				validator.classList.toggle('fade-out', false);
 				validator.style.display = "block";		
