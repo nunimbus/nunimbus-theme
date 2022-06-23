@@ -281,7 +281,13 @@
 		};
 
 		pwInput.addEventListener('focusin', function() {
-			pwInput.classList.toggle('password-error', false);
+			if (pwInput.classList.contains('password-error')) {
+				pwInput.style.paddingLeft = parseFloat(window.getComputedStyle(pwInput, null).paddingLeft.slice(0,-2)) + 2 + 'px';
+				pwInput.style.paddingRight = parseFloat(window.getComputedStyle(pwInput, null).paddingRight.slice(0,-2)) + 2 + 'px';
+				pwInput.style.paddingTop = parseFloat(window.getComputedStyle(pwInput, null).paddingTop.slice(0,-2)) + 2 + 'px';
+				pwInput.style.paddingBottom = parseFloat(window.getComputedStyle(pwInput, null).paddingBottom.slice(0,-2)) + 2 + 'px';
+				pwInput.classList.toggle('password-error', false);
+			}
 
 			if (valid == false) {
 				const cssObj = window.getComputedStyle(pwInput, null);
@@ -359,11 +365,25 @@
 			
 			if (valid) {
 				submit.disabled = false;
-				pwInput.classList.toggle('password-error', false);
 				validator.classList.toggle('fade-out', true);
+
+				if (pwInput.classList.contains('password-error')) {
+					pwInput.classList.toggle('password-error', false);
+					pwInput.style.paddingLeft = parseFloat(window.getComputedStyle(pwInput, null).paddingLeft.slice(0,-2)) + 2 + 'px';
+					pwInput.style.paddingRight = parseFloat(window.getComputedStyle(pwInput, null).paddingRight.slice(0,-2)) + 2 + 'px';
+					pwInput.style.paddingTop = parseFloat(window.getComputedStyle(pwInput, null).paddingTop.slice(0,-2)) + 2 + 'px';
+					pwInput.style.paddingBottom = parseFloat(window.getComputedStyle(pwInput, null).paddingBottom.slice(0,-2)) + 2 + 'px';
+				}
 			}
 			else {
-				pwInput.classList.toggle('password-error', true);
+				if (! pwInput.classList.contains('password-error')) {
+					pwInput.classList.toggle('password-error', true);
+					pwInput.style.paddingLeft = window.getComputedStyle(pwInput, null).paddingLeft.slice(0,-2) - 2 + 'px';
+					pwInput.style.paddingRight = window.getComputedStyle(pwInput, null).paddingRight.slice(0,-2) - 2 + 'px';
+					pwInput.style.paddingTop = window.getComputedStyle(pwInput, null).paddingTop.slice(0,-2) - 2 + 'px';
+					pwInput.style.paddingBottom = window.getComputedStyle(pwInput, null).paddingBottom.slice(0,-2) - 2 + 'px';
+				}
+
 				submit.disabled = true;
 				validator.classList.toggle('fade-out', false);
 				validator.style.display = "block";		
