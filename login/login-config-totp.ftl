@@ -21,9 +21,8 @@ ${msg("loginTotpTitle")}
                     <p><span id="kc-totp-secret-key">${totp.totpSecretEncoded}</span></p>
                     <p><a id="mode-barcode">${msg("loginTotpScanBarcode")}</a></p>
                 </li>
-                <li>
+                <li class="totp-step">
                     ${msg("loginTotpManualStep3")}
-                    <p>
                     <ul>
                         <li id="kc-totp-type">${msg("loginTotpType")}: ${msg("loginTotp." + totp.policy.type)}</li>
                         <li id="kc-totp-algorithm">${msg("loginTotpAlgorithm")}: ${totp.policy.getAlgorithmKey()}</li>
@@ -34,13 +33,13 @@ ${msg("loginTotpTitle")}
                             <li id="kc-totp-counter">${msg("loginTotpCounter")}: ${totp.policy.initialCounter}</li>
                         </#if>
                     </ul>
-                    </p>
                 </li>
             </div>
 
             <div id="totp-qr" class="hidden">
                 <li class="totp-step">
                     ${msg("loginTotpStep2")}
+                    <br>
                     <img id="kc-totp-secret-qr-code" src="data:image/png;base64, ${totp.totpSecretQrCode}" alt="Figure: Barcode"><br/>
                     <p><a id="mode-manual">${msg("loginTotpUnableToScan")}</a></p>
                 </li>
